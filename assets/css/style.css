@@ -1,0 +1,38 @@
+body {
+    background-image: url("background.png");
+    color: white;
+    font-family: Helvetica;
+}
+
+.container {
+    width: 60%;
+    background: silver;
+    margin: 20px auto;
+    overflow: auto;
+    padding: 20px;
+    border-radius: 10px;
+    border-style: outset;
+}
+
+header {
+    text-align: center;
+}
+
+.quiz li {
+    
+    list-style: none;
+    cursor: pointer;
+}
+
+.quiz, .result {
+    display: none;
+}
+
+.quiz-timer {
+    text-align: center;
+    font-weight: bold;
+}
+
+.selected {
+    background-color: #101010;
+}
