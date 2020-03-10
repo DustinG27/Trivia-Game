@@ -1,49 +1,58 @@
-var score = 0;
-
-var currentQuestion = 0;
-var questions = [
-  {
-    title: "What is the name of the rescue ship in 'Event Horizon'?",
-    answers: [
-      "Event Horizon",
-      "Proxima Centauri",
-      "Lewis and Clark",
-      "Slave II"
-    ],
-    correct: 2
-  },
-  {
-    title:
-      "The movie, Moon, opens with the line, 'Where are we now?' This is also the name of a song by which artist?",
-    answers: ["David Bowie", "Elton John", "Prince", "Tom Waits"],
-    correct: 0
-  },
-  {
-    title:
-      "Thiswas the first documentary style film to be nominated for the Best Picture Oscar",
-    answers: ["Borat", "District 9", "Cloverfield", "The Blair Witch Project"],
-    correct: 2
-  },
-  {
-    title:
-      "In Ex Machina, Ava is a female robot. What other film has a robot named Ava",
-    answers: ["Chapie", "The Bicentennial Man", "Automata", "The Machine"],
-    correct: 3
-  },
-  {
-    title:
-      "In the film 'Interstellar', on the water planet, the music in the background has a clear ticking noise. These ticks occur every _____ seconds. This length of time on the planet is one day on Earth.",
-    answers: ["1.75", "1.00", "1.25", "1.30"],
-    correct: 2
-  }
-];
-
 $(document).ready(function() {
+  var score = 0;
+  var timer = 20;
+  var currentQuestion = 0;
+  var questions = [
+    {
+      title: "What is the name of the rescue ship in 'Event Horizon'?",
+      answers: [
+        "Event Horizon",
+        "Proxima Centauri",
+        "Lewis and Clark",
+        "Slave II"
+      ],
+      correct: 2
+    },
+    {
+      title:
+        "The movie, Moon, opens with the line, 'Where are we now?' This is also the name of a song by which artist?",
+      answers: ["David Bowie", "Elton John", "Prince", "Tom Waits"],
+      correct: 0
+    },
+    {
+      title:
+        "This was the first documentary style film to be nominated for the Best Picture Oscar",
+      answers: [
+        "Borat",
+        "District 9",
+        "Cloverfield",
+        "The Blair Witch Project"
+      ],
+      correct: 2
+    },
+    {
+      title:
+        "In Ex Machina, Ava is a female robot. What other film has a robot named Ava",
+      answers: ["Chapie", "The Bicentennial Man", "Automata", "The Machine"],
+      correct: 3
+    },
+    {
+      title:
+        "In the film 'Interstellar', on the water planet, the music in the background has a clear ticking noise. These ticks occur every _____ seconds. Every click is one day on Earth.",
+      answers: ["1.75", "1.00", "1.25", "1.30"],
+      correct: 2
+    }
+  ];
+
+
+  // display the proper pages when clicked
+
   $(".start a").click(function(event) {
     event.preventDefault();
     $(".start").hide();
     $(".quiz").show();
     showQuestion();
+    countDownTimer();
   });
 
   $(".quiz ul").on("click", "li", function() {
@@ -60,60 +69,77 @@ $(document).ready(function() {
     } else {
       alert("You didn't select an answer");
     }
+
   });
 
   $(".result a").click(function(e) {
     e.preventDefault();
     restartQuiz();
   });
-});
 
 
+  // timer functions live here
 
-function showQuestion() {
-  var question = questions[currentQuestion];
-  $(".quiz h3").text(question.title);
-  $(".quiz ul").text("");
-  for (var i = 0; i < question.answers.length; i++) {
-    // console.log(question.answers);
-    $(".quiz ul").append(
-      "<li id=' " + i + "' type='radio'>" + question.answers[i] + "</li>"
-    );
+  function countDownTimer() {
+    setInterval(decrement, 1000);
   }
-}
 
-function checkAnswer(guess) {
-  var question = questions[currentQuestion];
-  if (question.correct === guess) {
-    score++;
+
+  function decrement () {
+    timer--;
+    $("#timer").html("<h3>" + timer + "</h3>");
+    if (timer == 0 ) {
+      showResults();
+    }
   }
-  currentQuestion++;
-  if (currentQuestion >= questions.length) {
-    showResults();
-  } else {
-    showQuestion();
+
+
+
+  //functions for question changes, results, checking user answer, and restart
+
+  function showQuestion() {
+    var question = questions[currentQuestion];
+    $(".quiz h3").text(question.title);
+    $(".quiz ul").text("");
+    for (var i = 0; i < question.answers.length; i++) {
+      // console.log(question.answers);
+      $(".quiz ul").append(
+        "<li id=' " + i + "' type='radio'>" + question.answers[i] + "</li>"
+      );
+      // console.log($(`#${i}`).val());
+    }
   }
-}
 
-function showResults() {
-  $(".quiz").hide();
-  $(".result").show();
-  $(".result p").text("You scored " + score + " out of " + questions.length);
-}
+  function checkAnswer(guess) {
+    // var question = questions[currentQuestion];
+    // console.log(questions[currentQuestion].correct);
+    // console.log(guess);
+    if (questions[currentQuestion].correct == guess) {
+      score++;
+    //  console.log("correct");
+    }
+    currentQuestion++;
+    if (currentQuestion >= questions.length) {
+      showResults();
+    } else {
+      showQuestion();
+    }
+  }
 
-function restartQuiz() {
-  $(".result").hide();
-  $(".start").show();
-  score = 0;
-  currentQuestion = 0;
-}
-
-function countDownTimer() {
-  count = count - 1;
-  if (count <= 0) {
-    clearInterval(counter);
+  function showResults() {
+    $(".quiz").hide();
     $(".result").show();
-    return;
+    $(".result p").text("You scored " + score + " out of " + questions.length);
   }
-  document.getElementById("timer").innerHTML = count + " secs";
-}
+
+  function restartQuiz() {
+    $(".result").hide();
+    $(".start").show();
+    score = 0;
+    currentQuestion = 0;
+  }
+
+ 
+
+
+});
